@@ -1,36 +1,40 @@
 import { useState } from "react";
-import Navbar from "./components/Navbar";
-import Sidebar from "./components/Sidebar";
-import MainContent from "./components/MainContent";
-import "./index.css";
-
-// ✅ Define a type for your items
-interface Item {
-  id: number;
-  type: "task" | "tracker";
-  name: string;
-}
+import MainContent, { Task, Tracker } from "./components/MainContent";
 
 function App() {
-  // ✅ Tell TypeScript that items is an array of Item
-  const [items, setItems] = useState<Item[]>([]);
+  // Tasks
+  const [tasks, setTasks] = useState<Task[]>([
+    { id: "1", title: "Read a book", goalType: "daily", status: "pending" },
+    { id: "2", title: "Workout", goalType: "daily", status: "pending" },
+  ]);
 
-  // ✅ Type the parameter
-  const addItem = (type: "task" | "tracker") => {
-    const newItem: Item = {
-      id: Date.now(),
-      type,
-      name: type === "task" ? "New Task" : "New Tracker",
-    };
-    setItems((prev) => [...prev, newItem]);
+  // Trackers
+  const [trackers, setTrackers] = useState<Tracker[]>([
+    { id: "1", name: "Exercise", baseFrequency: 5, actualFrequency: 2 },
+    { id: "2", name: "Reading", baseFrequency: 7, actualFrequency: 3 },
+  ]);
+
+  // Update task status
+  const updateTaskStatus = (id: string, status: "pending" | "completed") => {
+    setTasks((prev) =>
+      prev.map((t) => (t.id === id ? { ...t, status } : t))
+    );
+  };
+
+  // Add new task
+  const addTask = (task: Task) => {
+    setTasks((prev) => [...prev, task]);
   };
 
   return (
-    <div className="app-container">
-     
-      <Sidebar addItem={addItem} />
-      <MainContent items={items} />
-      <Navbar />
+    <div className="min-h-screen bg-gray-50 p-4">
+      <h1 className="text-2xl font-bold mb-4">My ToDo & Tracker App</h1>
+      <MainContent
+        tasks={tasks}
+        trackers={trackers}
+        updateTaskStatus={updateTaskStatus}
+        addTask={addTask}
+      />
     </div>
   );
 }

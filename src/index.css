@@ -1,97 +1,188 @@
-/* Base layout */
-.app-container {
+/* === RESET & BASE === */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  background-color: #f1f5f9;
+}
+
+/* === FLEX LAYOUT (3 SECTIONS) === */
+.flex {
   display: flex;
+}
+
+.h-screen {
   height: 100vh;
-  width: 100vw;
-  background-color: #f8f9fb;
-  color: #333;
-  font-family: "Inter", sans-serif;
 }
 
-/* Navbar */
-.navbar {
-  background-color: #ffffff;
-  width: 15%;
-  padding: 20px;
-  border-right: 1px solid #e5e7eb;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 600;
-  box-shadow: 2px 0 6px rgba(0, 0, 0, 0.05);
+.bg-gray-100 {
+  background-color: #f1f5f9;
 }
 
-/* Main Content */
-.main-content {
+.text-gray-900 {
+  color: #111827;
+}
+
+.flex-1 {
   flex: 1;
-  padding: 30px;
+}
+
+.overflow-y-auto {
   overflow-y: auto;
 }
 
-.main-content h3 {
-  margin-bottom: 15px;
+.p-6 {
+  padding: 1.5rem;
 }
 
-.main-content ul {
+/* === SIDEBAR === */
+.sidebar {
+  width: 20%;
+  background-color: #f8fafc;
+  border-right: 1px solid #e2e8f0;
+  padding: 1rem;
+}
+
+/* === NAVBAR === */
+.navbar {
+  width: 20%;
+  background-color: #f8fafc;
+  border-left: 1px solid #e2e8f0;
+  padding: 1rem;
+}
+
+/* === MAIN CONTENT === */
+main {
+  flex: 1;
+  background-color: #ffffff;
+  border-left: 1px solid #e2e8f0;
+  border-right: 1px solid #e2e8f0;
+  padding: 1.5rem;
+  overflow-y: auto;
+}
+
+/* === SECTIONS === */
+section {
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 10px;
+  padding: 1rem;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+section h2 {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #1e293b;
+  border-bottom: 2px solid #e2e8f0;
+  margin-bottom: 0.75rem;
+  padding-bottom: 0.4rem;
+}
+
+/* === LISTS === */
+ul {
   list-style: none;
   padding: 0;
 }
 
-.main-content li {
-  background: #fff;
-  margin-bottom: 12px;
-  padding: 12px 16px;
-  border-radius: 10px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+li {
   display: flex;
   justify-content: space-between;
   align-items: center;
-}
-
-.main-content li .tag {
-  font-size: 12px;
-  padding: 3px 8px;
-  border-radius: 6px;
-  background-color: #e0e7ff;
-  color: #374151;
-  text-transform: capitalize;
-}
-
-.main-content li.tracker .tag {
-  background-color: #d1fae5;
-}
-
-.empty {
-  color: #888;
-  margin-top: 10px;
-}
-
-/* Sidebar */
-.sidebar {
-  background-color: #ffffff;
-  width: 20%;
-  padding: 20px;
-  border-left: 1px solid #e5e7eb;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  box-shadow: -2px 0 6px rgba(0, 0, 0, 0.05);
-}
-
-.sidebar h3 {
-  margin-bottom: 10px;
-}
-
-.sidebar button {
-  background-color: #f1f5f9;
-  border: none;
-  padding: 10px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
   border-radius: 8px;
-  cursor: pointer;
-  font-weight: 500;
-  transition: background-color 0.2s;
+  padding: 0.75rem 1rem;
+  margin-bottom: 0.6rem;
+  transition: 0.2s ease;
 }
 
-.sidebar button:hover {
-  background-color: #e2e8f0;
+li:hover {
+  background-color: #ffffff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.07);
+  transform: scale(1.01);
+}
+
+/* === STATUS COLORS === */
+.status.completed {
+  color: #14532d;
+  background-color: #bbf7d0;
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+.status.pending {
+  color: #78350f;
+  background-color: #fde68a;
+  border-radius: 6px;
+  padding: 0.2rem 0.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+}
+
+/* === EMPTY STATE === */
+.text-gray-500 {
+  color: #6b7280;
+  font-style: italic;
+}
+
+/* === BUTTONS & INPUTS === */
+button, input, select, textarea {
+  font-size: 1rem;
+  border: 1px solid #d1d5db;
+  border-radius: 8px;
+  padding: 0.6rem 1rem;
+  margin: 0.5rem 0;
+}
+
+button {
+  background-color: #2563eb;
+  color: white;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+button:hover {
+  background-color: #1e40af;
+}
+
+input:focus, select:focus, textarea:focus {
+  outline: 2px solid #3b82f6;
+  border-color: transparent;
+}
+
+/* === SCROLLBAR (OPTIONAL NICE LOOK) === */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 10px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: #94a3b8;
+}
+/* Restrict all input and button elements by default */
+input, button, select, textarea {
+  width: auto;
+  max-width: 100%;
+  box-sizing: border-box;
+}
+
+/* Optional: make sure the body and app layout are consistent */
+body {
+  margin: 0;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  background-color: #f7f7f7;
+  color: #111;
 }
