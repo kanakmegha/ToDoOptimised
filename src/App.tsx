@@ -1,42 +1,48 @@
 import { useState } from "react";
+import Sidebar from "./components/Sidebar";
+import Navbar from "./components/Navbar";
 import MainContent, { Task, Tracker } from "./components/MainContent";
 
-function App() {
-  // Tasks
+export default function App() {
+  // --- States ---
   const [tasks, setTasks] = useState<Task[]>([
     { id: "1", title: "Read a book", goalType: "daily", status: "pending" },
-    { id: "2", title: "Workout", goalType: "daily", status: "pending" },
+    { id: "2", title: "Workout", goalType: "daily", status: "completed" },
   ]);
 
-  // Trackers
   const [trackers, setTrackers] = useState<Tracker[]>([
-    { id: "1", name: "Exercise", baseFrequency: 5, actualFrequency: 2 },
-    { id: "2", name: "Reading", baseFrequency: 7, actualFrequency: 3 },
+    { id: "1", name: "Exercise", baseFrequency: 5, actualFrequency: 3 },
+    { id: "2", name: "Reading", baseFrequency: 7, actualFrequency: 4 },
   ]);
 
-  // Update task status
-  const updateTaskStatus = (id: string, status: "pending" | "completed") => {
-    setTasks((prev) =>
-      prev.map((t) => (t.id === id ? { ...t, status } : t))
-    );
-  };
+  // --- Functions ---
+  const addTask = (task: Task) => setTasks((prev) => [...prev, task]);
+  const addTracker = (tracker: Tracker) => setTrackers((prev) => [...prev, tracker]);
 
-  // Add new task
-  const addTask = (task: Task) => {
-    setTasks((prev) => [...prev, task]);
-  };
+  const updateTaskStatus = (id: string, status: "pending" | "completed") =>
+    setTasks((prev) => prev.map((t) => (t.id === id ? { ...t, status } : t)));
 
+  // --- Layout ---
   return (
-    <div className="min-h-screen bg-gray-50 p-4">
-      <h1 className="text-2xl font-bold mb-4">My ToDo & Tracker App</h1>
-      <MainContent
-        tasks={tasks}
-        trackers={trackers}
-        updateTaskStatus={updateTaskStatus}
-        addTask={addTask}
-      />
+    <div className="flex flex-row h-screen bg-gray-100 text-gray-900">
+      {/* Sidebar */}
+      <aside className="w-1/5 border-r border-gray-300 p-4 overflow-y-auto bg-white">
+        <Sidebar addTask={addTask} addTracker={addTracker} />
+      </aside>
+
+      {/* Main Content */}
+      <main className="flex-1 overflow-y-auto p-6">
+        <MainContent
+          tasks={tasks}
+          trackers={trackers}
+          updateTaskStatus={updateTaskStatus}
+        />
+      </main>
+
+      {/* Navbar */}
+      <nav className="w-1/5 border-l border-gray-300 p-4 bg-white overflow-y-auto">
+        <Navbar />
+      </nav>
     </div>
   );
 }
-
-export default App;
