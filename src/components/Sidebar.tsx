@@ -1,114 +1,50 @@
-/* import { useState } from "react";
-import AddTaskModal from "./AddTaskModal";
+import { useState } from "react";
+import { Task, Tracker } from "../types";
 import AddTrackerModal from "./AddTrackerModal";
 
-interface SidebarProps {
-  addTask: (task: any) => void;
-  addTracker: (tracker: any) => void;
-}
-
-export default function Sidebar({ addTask, addTracker }: SidebarProps) {
-  const [showTaskModal, setShowTaskModal] = useState(false);
-  const [showTrackerModal, setShowTrackerModal] = useState(false);
-
-  return (
-    <aside className="w-1/5 bg-white border-l p-4 flex flex-col gap-4 shadow-sm">
-      <h2 className="text-lg font-semibold">Actions</h2>
-      <button
-        onClick={() => setShowTaskModal(true)}
-        className="bg-gray-200 hover:bg-gray-300 rounded p-2"
-      >
-        + Create Task
-      </button>
-      <button
-        onClick={() => setShowTrackerModal(true)}
-        className="bg-gray-200 hover:bg-gray-300 rounded p-2"
-      >
-        + Create Tracker
-      </button>
-
-      {showTaskModal && (
-        <AddTaskModal close={() => setShowTaskModal(false)} addTask={addTask} />
-      )}
-      {showTrackerModal && (
-        <AddTrackerModal
-          close={() => setShowTrackerModal(false)}
-          addTracker={addTracker}
-        />
-      )}
-    </aside>
-  );
-}
- */
-import { useState } from "react";
-import { Task, Tracker } from "../components/MainContent";
-
-interface SidebarProps {
-  addTask: (task: Task) => void;
-  addTracker: (tracker: Tracker) => void;
-}
-
-export default function Sidebar({ addTask, addTracker }: SidebarProps) {
+export default function Sidebar({ addTask, addTracker }: { addTask: (t: Task) => void; addTracker: (t: Tracker) => void; }) {
   const [taskTitle, setTaskTitle] = useState("");
   const [trackerName, setTrackerName] = useState("");
+  const [baseFrequency, setBaseFrequency] = useState<number>(1);
+  const [showModal, setShowModal] = useState(false);
 
-  const handleAddTask = () => {
-    if (!taskTitle.trim()) return;
-    addTask({
-      id: Date.now().toString(),
-      title: taskTitle,
-      goalType: "daily",
-      status: "pending",
-    });
-    setTaskTitle("");
-  };
-
-  const handleAddTracker = () => {
-    if (!trackerName.trim()) return;
-    addTracker({
-      id: Date.now().toString(),
-      name: trackerName,
-      baseFrequency: 5,
-      actualFrequency: 0,
-    });
-    setTrackerName("");
-  };
+  const createEmptyProgress = (): Record<string, number> => ({});
 
   return (
     <div>
-      <h2 className="text-lg font-semibold mb-4">Create</h2>
+      <h2 className="text-xl font-semibold mb-4">Create</h2>
 
       <div className="mb-6">
-        <input
-          type="text"
-          placeholder="New Task"
-          value={taskTitle}
-          onChange={(e) => setTaskTitle(e.target.value)}
-          className="border rounded px-2 py-1 w-full max-w-xs mb-2"
-        />
-        <button
-          onClick={handleAddTask}
-          className="bg-blue-500 text-white px-3 py-1 rounded hover:bg-blue-600 w-auto"
-        >
-          Add Task
-        </button>
+        <h3 className="font-medium mb-2">New Task</h3>
+        <input className="w-full border p-2 rounded mb-2" placeholder="Task title..." value={taskTitle} onChange={(e) => setTaskTitle(e.target.value)} />
+        <button className="bg-blue-600 text-white px-3 py-2 rounded w-full" onClick={() => {
+          if (!taskTitle.trim()) return;
+          addTask({ id: Date.now().toString(), title: taskTitle.trim(), goalType: "daily", completedDates: [] });
+          setTaskTitle("");
+        }}>Add Task</button>
       </div>
 
-      <div>
-        <input
-          type="text"
-          placeholder="New Tracker"
-          value={trackerName}
-          onChange={(e) => setTrackerName(e.target.value)}
-          className="border rounded px-2 py-1 w-full max-w-xs mb-2"
-        />
-        <button
-          onClick={handleAddTracker}
-          className="bg-green-500 text-white px-3 py-1 rounded hover:bg-green-600 w-auto"
-        >
-          Add Tracker
-        </button>
+      <div className="mb-6">
+        <h3 className="font-medium mb-2">New Tracker</h3>
+        <input className="w-full border p-2 rounded mb-2" placeholder="Tracker name..." value={trackerName} onChange={(e) => setTrackerName(e.target.value)} />
+        <div className="flex items-center gap-2 mb-3">
+          <label className="text-sm">Daily target</label>
+          <input type="number" min={1} className="border p-1 rounded w-20" value={baseFrequency} onChange={(e) => setBaseFrequency(Math.max(1, Number(e.target.value || 1)))} />
+          <span className="text-sm text-gray-500">times / day</span>
+        </div>
+        <button className="bg-green-600 text-white px-3 py-2 rounded w-full" onClick={() => {
+          if (!trackerName.trim()) return;
+          addTracker({ id: Date.now().toString(), name: trackerName.trim(), baseFrequency, progress: createEmptyProgress() });
+          setTrackerName("");
+          setBaseFrequency(1);
+        }}>Add Tracker</button>
+
+        <div className="mt-3">
+          <button className="text-sm text-gray-600 hover:underline" onClick={() => setShowModal(true)}>Open advanced tracker modal</button>
+        </div>
       </div>
+
+      {showModal && <AddTrackerModal close={() => setShowModal(false)} addTracker={(t) => { addTracker(t); setShowModal(false); }} />}
     </div>
   );
 }
