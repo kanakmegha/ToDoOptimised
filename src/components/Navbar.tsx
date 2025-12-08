@@ -1,24 +1,43 @@
-import { Task } from "../types";
 import { useState } from "react";
+import { Task } from "../types";
 
 interface Props {
-  addTask: (t: Task) => void;
+  addTask: (task: Task) => void;
+  openAddTracker: () => void;
 }
 
-export default function Navbar({ addTask }: Props) {
-  const [quick, setQuick] = useState("");
-  return (
-    <div>
-      <h2 className="text-lg font-semibold mb-4">Overview</h2>
-      <p className="text-sm text-gray-600 mb-4">Switch day / week / month / year using the controls in the main header.</p>
+export default function Navbar({ addTask, openAddTracker }: Props) {
+  const [taskName, setTaskName] = useState("");
 
-      <div className="mb-4">
-        <input value={quick} onChange={(e) => setQuick(e.target.value)} placeholder="Quick task..." className="w-full p-2 border rounded mb-2" />
-        <button className="bg-blue-600 text-white px-3 py-2 rounded w-full" onClick={() => {
-          if (!quick.trim()) return;
-          addTask({ id: Date.now().toString(), title: quick.trim(), goalType: "daily", completedDates: []});
-          setQuick("");
-        }}>Add Task</button>
+  const handleAddTask = () => {
+    if (!taskName.trim()) return;
+    addTask({
+      id: Date.now().toString(),
+      name: taskName.trim(),
+      status: "pending"
+    });
+    setTaskName("");
+  };
+
+  return (
+    <div className="flex items-center justify-between w-full">
+      <h1 className="text-2xl font-bold text-gray-800">Goal Dashboard</h1>
+
+      <div className="flex gap-3">
+        <input
+          className="border p-2 rounded w-48"
+          placeholder="Add task..."
+          value={taskName}
+          onChange={(e) => setTaskName(e.target.value)}
+        />
+
+        <button onClick={handleAddTask} className="bg-blue-600 text-white px-4 py-2 rounded">
+          Add Task
+        </button>
+
+        <button onClick={openAddTracker} className="bg-green-600 text-white px-4 py-2 rounded">
+          + Tracker
+        </button>
       </div>
     </div>
   );
