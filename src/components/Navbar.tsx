@@ -7,35 +7,42 @@ interface Props {
 }
 
 export default function Navbar({ addTask, openAddTracker }: Props) {
-  const [taskName, setTaskName] = useState("");
+  const [taskTitle, setTaskTitle] = useState("");
 
   const handleAddTask = () => {
-    if (!taskName.trim()) return;
+    if (!taskTitle.trim()) return;
     addTask({
       id: Date.now().toString(),
-      name: taskName.trim(),
-      status: "pending"
+      title: taskTitle.trim(),
+      status: "pending",
+      goalType: "daily"
     });
-    setTaskName("");
+    setTaskTitle("");
   };
 
   return (
-    <div className="flex items-center justify-between w-full">
-      <h1 className="text-2xl font-bold text-gray-800">Goal Dashboard</h1>
+    <div className="flex items-center justify-between w-full p-4 bg-white shadow">
+      <h1 className="text-xl font-bold text-gray-800">Goal Dashboard</h1>
 
-      <div className="flex gap-3">
+      <div className="flex gap-3 items-center">
         <input
           className="border p-2 rounded w-48"
-          placeholder="Add task..."
-          value={taskName}
-          onChange={(e) => setTaskName(e.target.value)}
+          placeholder="New task..."
+          value={taskTitle}
+          onChange={(e) => setTaskTitle(e.target.value)}
         />
 
-        <button onClick={handleAddTask} className="bg-blue-600 text-white px-4 py-2 rounded">
+        <button
+          onClick={handleAddTask}
+          className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded"
+        >
           Add Task
         </button>
 
-        <button onClick={openAddTracker} className="bg-green-600 text-white px-4 py-2 rounded">
+        <button
+          onClick={openAddTracker}
+          className="bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded"
+        >
           + Tracker
         </button>
       </div>
